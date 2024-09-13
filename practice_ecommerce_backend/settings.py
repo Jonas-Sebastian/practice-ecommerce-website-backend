@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'practice_shop',
+    'admin_authentication',
     'rest_framework',
 ]
 
