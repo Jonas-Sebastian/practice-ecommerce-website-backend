@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'practice_shop',
     'shop_admin',
+    'shop_images',
     'rest_framework',
     'rest_framework.authtoken',
 ]
