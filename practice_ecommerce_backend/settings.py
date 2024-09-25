@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'practice_shop',
     'shop_admin',
     'shop_images',
@@ -64,6 +65,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://practice-ecommerce-website.vercel.app/",
 ]
 
 ROOT_URLCONF = 'practice_ecommerce_backend.urls'
