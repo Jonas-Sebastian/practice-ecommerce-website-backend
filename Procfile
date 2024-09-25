@@ -1,0 +1,1 @@
+web: gunicorn practice_ecommerce_backend.wsgi
