@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-47etwl9cmvc^$gbqu)=4#897)olltxnk0c(1-h)!f(*x%d5-&1
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "127.0.0.1",
     "practice-ecommerce-website-backend.onrender.com",
 ]
 
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
 
@@ -67,7 +69,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://practice-ecommerce-website.vercel.app/",
+    "https://practice-ecommerce-website.vercel.app",
 ]
 
 ROOT_URLCONF = 'practice_ecommerce_backend.urls'
