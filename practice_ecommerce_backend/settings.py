@@ -69,7 +69,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://practice-ecommerce-website.vercel.app",
+    "https://jonas-sebastian-shop.vercel.app",
 ]
 
 ROOT_URLCONF = 'practice_ecommerce_backend.urls'
