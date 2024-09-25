@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-47etwl9cmvc^$gbqu)=4#897)olltxnk0c(1-h)!f(*x%d5-&1
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "https://practice-ecommerce-website-backend.onrender.com",
+    "practice-ecommerce-website-backend.onrender.com",
 ]
 
 
