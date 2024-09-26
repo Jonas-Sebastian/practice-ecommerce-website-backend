@@ -12,6 +12,13 @@ class ShopAdminAccountDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ShopAdminAccount.objects.all()
     serializer_class = ShopAdminAccountSerializer
 
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
 class ShopAdminAccountListView(generics.ListAPIView):
     queryset = ShopAdminAccount.objects.all()
     serializer_class = ShopAdminAccountSerializer
