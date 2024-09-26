@@ -8,6 +8,10 @@ class ShopAdminAccountCreateView(generics.CreateAPIView):
     queryset = ShopAdminAccount.objects.all()
     serializer_class = ShopAdminAccountSerializer
 
+class ShopAdminAccountListView(generics.ListAPIView):
+    queryset = ShopAdminAccount.objects.all()
+    serializer_class = ShopAdminAccountSerializer
+
 class ShopAdminLoginView(APIView):
     def post(self, request):
         serializer = ShopAdminLoginSerializer(data=request.data)
@@ -17,6 +21,7 @@ class ShopAdminLoginView(APIView):
             password = serializer.validated_data.get('password')
 
             try:
+                # Get the user by email or username
                 if email:
                     user = ShopAdminAccount.objects.get(email=email)
                 elif username:
@@ -24,8 +29,19 @@ class ShopAdminLoginView(APIView):
                 else:
                     return Response({'error': 'Invalid credentials.'}, status=status.HTTP_400_BAD_REQUEST)
 
-                if user and user.check_password(password):
-                    return Response({'message': 'Login successful.'}, status=status.HTTP_200_OK)
+                # Check if the user exists and if the password is correct
+                if user.check_password(password):
+                    # Check if the account is approved
+                    if not user.is_approved:
+                        return Response(
+                            {'error': 'Your account is pending approval. Please wait for admin approval.'},
+                            status=status.HTTP_403_FORBIDDEN
+                        )
+                    # Return success if the account is approved
+                    return Response({
+                        'message': 'Login successful.',
+                        'is_approved': user.is_approved  # Include the approval status
+                    }, status=status.HTTP_200_OK)
                 else:
                     return Response({'error': 'Invalid credentials.'}, status=status.HTTP_400_BAD_REQUEST)
             except ShopAdminAccount.DoesNotExist:
