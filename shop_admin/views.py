@@ -8,6 +8,10 @@ class ShopAdminAccountCreateView(generics.CreateAPIView):
     queryset = ShopAdminAccount.objects.all()
     serializer_class = ShopAdminAccountSerializer
 
+class ShopAdminAccountDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ShopAdminAccount.objects.all()
+    serializer_class = ShopAdminAccountSerializer
+
 class ShopAdminAccountListView(generics.ListAPIView):
     queryset = ShopAdminAccount.objects.all()
     serializer_class = ShopAdminAccountSerializer
