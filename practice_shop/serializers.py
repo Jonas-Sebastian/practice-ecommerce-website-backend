@@ -32,7 +32,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 # Serializer for Order creation, which includes payment details and order items
 class OrderCreateSerializer(serializers.ModelSerializer):
     products = OrderItemSerializer(many=True)
-    payment_method_data = serializers.JSONField(write_only=True)  # Add this field to handle payment method data
+    payment_method_data = serializers.JSONField(required=False)  # Make this field optional
 
     class Meta:
         model = Order
@@ -42,13 +42,23 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             'shipping_address',
             'order_notes',
             'payment_method',
-            'payment_method_data',  # Add payment_method_data here
+            'payment_method_data',
             'products',
         ]
 
+    def validate(self, attrs):
+        # Check if payment_method_data is required based on payment_method
+        payment_method = attrs.get('payment_method')
+
+        if payment_method in ['credit_card', 'paypal', 'bank_transfer']:
+            if not attrs.get('payment_method_data'):
+                raise serializers.ValidationError({'payment_method_data': 'This field is required.'})
+
+        return attrs
+
     def create(self, validated_data):
         products_data = validated_data.pop('products')
-        payment_method_data = validated_data.pop('payment_method_data')
+        payment_method_data = validated_data.pop('payment_method_data', None)  # Handle if it's None
 
         # Create the order
         order = Order.objects.create(**validated_data)
@@ -93,5 +103,10 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         # Maya Payment
         elif payment_method == 'maya':
             MayaPayment.objects.create(order=order)
+
+        # Cash on Delivery (COD)
+        elif payment_method == 'cod':
+            # Handle COD if necessary
+            pass
 
         return order
