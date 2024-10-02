@@ -3,7 +3,7 @@
 ## Description
 Welcome to my eCommerce portfolio! This site showcases my skills in web development through both the frontend and backend of an online shopping platform.
 
-### Live Demo
+### Front End Live Demo
 If you prefer to explore the portfolio without installing anything, you can access the live versions here:
 - **Frontend Shop:** [View Frontend Live](https://jonas-sebastian-shop.vercel.app/)
 - **Frontend Admin Management:** [View Admin Panel](https://jonas-sebastian-shop.vercel.app/admin)
@@ -12,8 +12,19 @@ If you prefer to explore the portfolio without installing anything, you can acce
 
 ### Testing Credentials
 For the Admin Management panel, you can use the following credentials:
-- **Username:** `user`
-- **Password:** `user`
+- **Username:** `test`
+- **Password:** `test`
+
+### Backend Live Demo
+If you prefer to explore the portfolio without installing anything, you can access the live version here:
+- **Backend Django Admin:** [View Django Admin](https://practice-ecommerce-website-backend.onrender.com/admin)
+
+**Note:** It may take a moment for the backend data to load due to hosting limitations on Render.
+
+### Testing Credentials
+For the Admin Management panel, you can use the following credentials:
+- **Username:** `admin`
+- **Password:** `admin`
 
 ## Local Installation
 
