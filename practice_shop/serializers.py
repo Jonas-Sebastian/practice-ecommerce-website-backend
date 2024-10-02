@@ -1,112 +1,69 @@
 from rest_framework import serializers
 from .models import Category, Product, Order, OrderItem, CreditCardPayment, PayPalPayment, BankTransferPayment, GCashPayment, MayaPayment
 
-# Serializer for the Product model
-class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = '__all__'
-
-# Serializer for the Category model
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
 
-# Serializer for the OrderItem model
+class ProductSerializer(serializers.ModelSerializer):
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())  # Only accept category ID
+
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'category', 'description', 'price']
+
+    def create(self, validated_data):
+        return Product.objects.create(**validated_data)
+
 class OrderItemSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)
-    product_id = serializers.PrimaryKeyRelatedField(
-        queryset=Product.objects.all(), source='product', write_only=True
-    )
+    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())  # Accepts just the product ID
 
     class Meta:
         model = OrderItem
-        fields = ['product', 'product_id', 'quantity', 'price']
+        fields = ['product', 'quantity', 'price']
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation.pop('product_id', None)
-        return representation
+    def create(self, validated_data):
+        return OrderItem.objects.create(**validated_data)
 
-# Serializer for Order creation, which includes payment details and order items
-class OrderCreateSerializer(serializers.ModelSerializer):
-    products = OrderItemSerializer(many=True)
-    payment_method_data = serializers.JSONField(required=False)  # Make this field optional
+class OrderSerializer(serializers.ModelSerializer):
+    order_items = OrderItemSerializer(many=True)
 
     class Meta:
         model = Order
-        fields = [
-            'customer_name',
-            'customer_email',
-            'shipping_address',
-            'order_notes',
-            'payment_method',
-            'payment_method_data',
-            'products',
-        ]
-
-    def validate(self, attrs):
-        # Check if payment_method_data is required based on payment_method
-        payment_method = attrs.get('payment_method')
-
-        if payment_method in ['credit_card', 'paypal', 'bank_transfer']:
-            if not attrs.get('payment_method_data'):
-                raise serializers.ValidationError({'payment_method_data': 'This field is required.'})
-
-        return attrs
+        fields = ['id', 'customer_name', 'customer_email', 'shipping_address', 
+                  'order_notes', 'payment_method', 'created_at', 'status', 'order_items']
 
     def create(self, validated_data):
-        products_data = validated_data.pop('products')
-        payment_method_data = validated_data.pop('payment_method_data', None)  # Handle if it's None
-
-        # Create the order
+        order_items_data = validated_data.pop('order_items')
         order = Order.objects.create(**validated_data)
 
-        # Create order items
-        for product_data in products_data:
-            product = product_data.get('product')
-            OrderItem.objects.create(order=order, product=product, quantity=product_data['quantity'], price=product_data['price'])
-
-        # Handle different payment methods
-        payment_method = validated_data.get('payment_method')
-
-        # Credit Card Payment
-        if payment_method == 'credit_card':
-            CreditCardPayment.objects.create(
-                order=order,
-                card_number=payment_method_data['card_number'],
-                expiry_date=payment_method_data['expiry_date'],
-                cvv=payment_method_data['cvv']
-            )
-
-        # PayPal Payment
-        elif payment_method == 'paypal':
-            PayPalPayment.objects.create(
-                order=order,
-                paypal_email=payment_method_data['paypal_email']
-            )
-
-        # Bank Transfer Payment
-        elif payment_method == 'bank_transfer':
-            BankTransferPayment.objects.create(
-                order=order,
-                account_name=payment_method_data['account_name'],
-                account_number=payment_method_data['account_number'],
-                bank_name=payment_method_data['bank_name']
-            )
-
-        # GCash Payment
-        elif payment_method == 'gcash':
-            GCashPayment.objects.create(order=order)
-
-        # Maya Payment
-        elif payment_method == 'maya':
-            MayaPayment.objects.create(order=order)
-
-        # Cash on Delivery (COD)
-        elif payment_method == 'cod':
-            # Handle COD if necessary
-            pass
+        for item_data in order_items_data:
+            OrderItem.objects.create(order=order, **item_data)
 
         return order
+        
+class CreditCardPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditCardPayment
+        fields = ['order', 'card_number', 'expiry_date', 'cvv']
+
+class PayPalPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PayPalPayment
+        fields = ['order', 'paypal_email']
+
+class BankTransferPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BankTransferPayment
+        fields = ['order', 'account_name', 'account_number', 'bank_name']
+
+class GCashPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GCashPayment
+        fields = ['order']
+
+class MayaPaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MayaPayment
+        fields = ['order']
