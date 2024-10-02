@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import Product, Category, Order, OrderItem
-from .serializers import ProductSerializer, CategorySerializer, OrderCreateSerializer, OrderItemSerializer
+from .serializers import ProductSerializer, CategorySerializer, OrderSerializer, OrderItemSerializer
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -16,7 +16,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
 
     def get_serializer_class(self):
-        return OrderCreateSerializer
+        return OrderSerializer
 
     def create(self, request, *args, **kwargs):
         """Create a new order."""
