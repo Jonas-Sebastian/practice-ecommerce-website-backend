@@ -11,7 +11,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'name', 'category', 'description', 'price']
+        fields = ['id', 'name', 'category', 'description', 'price', 'image']
 
     def create(self, validated_data):
         return Product.objects.create(**validated_data)
@@ -28,11 +28,12 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     order_items = OrderItemSerializer(many=True)
+    status_choices = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = ['id', 'customer_name', 'customer_email', 'shipping_address', 
-                  'order_notes', 'payment_method', 'created_at', 'status', 'order_items']
+                  'order_notes', 'payment_method', 'created_at', 'status', 'order_items', 'status_choices']
 
     def create(self, validated_data):
         order_items_data = validated_data.pop('order_items')
@@ -42,6 +43,9 @@ class OrderSerializer(serializers.ModelSerializer):
             OrderItem.objects.create(order=order, **item_data)
 
         return order
+    
+    def get_status_choices(self, obj):
+        return Order.STATUS_CHOICES
         
 class CreditCardPaymentSerializer(serializers.ModelSerializer):
     class Meta:

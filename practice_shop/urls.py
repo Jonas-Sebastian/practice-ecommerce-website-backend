@@ -12,4 +12,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('orders/<int:pk>/update-status/', OrderViewSet.as_view({'patch': 'update_status'}), name='order-update-status'),
     path('orders/<int:pk>/items/', OrderViewSet.as_view({'get': 'get_order_items'}), name='order-items'),
+    path('orders/status-choices/', OrderViewSet.as_view({'get': 'get_status_choices'}), name='order-status-choices'),
 ]

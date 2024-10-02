@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Product, Category, Order, OrderItem
 from .serializers import ProductSerializer, CategorySerializer, OrderSerializer, OrderItemSerializer
@@ -45,6 +46,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(order)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['get'], url_path='status-choices')
+    def get_status_choices(self, request):
+        """Return the status choices defined in the Order model."""
+        status_choices = [{'value': key, 'label': label} for key, label in Order.STATUS_CHOICES]
+        return Response(status_choices)
 
 class OrderItemViewSet(viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
