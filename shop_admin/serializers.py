@@ -8,7 +8,6 @@ class ShopAdminAccountSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'username', 'password', 'is_staff', 'is_admin', 'is_approved']
         extra_kwargs = {
             'password': {'write_only': True},
-            'is_approved': {'read_only': True}  # Only set by admin during approval
         }
 
     def create(self, validated_data):
