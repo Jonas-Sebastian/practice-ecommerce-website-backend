@@ -26,8 +26,18 @@ class ShopAdminAccountSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         if 'password' in validated_data:
-            instance.password = make_password(validated_data['password'])  # Hash the new password
-        return super().update(instance, validated_data)
+            instance.password = make_password(validated_data['password'])
+
+        # Only assign a display_id if the account is being approved
+        if validated_data.get('is_approved', False) and not instance.is_approved:
+            last_display_id = ShopAdminAccount.objects.filter(is_approved=True).order_by('display_id').last()
+            instance.display_id = (last_display_id.display_id + 1) if last_display_id else 1
+        
+        # Update other fields
+        instance.is_approved = validated_data.get('is_approved', instance.is_approved)
+        instance.save()
+        
+        return instance  # Return the updated instance
 
 class ShopAdminLoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=False)
