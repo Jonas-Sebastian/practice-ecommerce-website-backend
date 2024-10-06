@@ -12,20 +12,29 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='search')
     def search(self, request):
-        query = request.query_params.get('q', '')
+        query = request.query_params.get('q', '').strip()  # Sanitize query input
         category_id = request.query_params.get('category', None)
 
-        # Build the filter based on query and category (if provided)
-        filters = Q(name__icontains=query) | Q(description__icontains=query)
+        # Start with an empty filter, only add conditions if query or category_id is provided
+        filters = Q()
+
+        if query:
+            filters |= Q(name__icontains=query) | Q(description__icontains=query)
 
         if category_id:
-            filters &= Q(category__id=category_id)
+            try:
+                filters &= Q(category__id=int(category_id))  # Ensure category_id is a valid integer
+            except ValueError:
+                return Response({"detail": "Invalid category ID."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Filter the products and ensure only available ones are returned
+        # Fetch products that match the filters and are available
         products = Product.objects.filter(filters, available=True)
 
+        # Serialize the filtered products
         serializer = self.get_serializer(products, many=True)
-        return Response(serializer.data)
+
+        # Return the results (empty list if no products match the filter)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -48,7 +57,6 @@ class OrderViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         """Update the status of an existing order."""
         order = get_object_or_404(Order, pk=pk)
-        # Only allow updating the status
         if 'status' not in request.data:
             return Response({"detail": "Only order status can be updated."}, status=status.HTTP_400_BAD_REQUEST)
 
