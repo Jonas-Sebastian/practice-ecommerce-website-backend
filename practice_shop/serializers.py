@@ -7,11 +7,11 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())  # Only accept category ID
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())  # Accepts category ID
 
     class Meta:
         model = Product
-        fields = ['id', 'name', 'category', 'description', 'price', 'image']
+        fields = ['id', 'name', 'category', 'description', 'price', 'image', 'stock', 'available']
 
     def create(self, validated_data):
         return Product.objects.create(**validated_data)
