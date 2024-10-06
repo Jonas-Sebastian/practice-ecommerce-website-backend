@@ -11,6 +11,7 @@ class ShopAdminAccount(models.Model):
     is_approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+    display_id = models.IntegerField(unique=True, editable=False, null=True)
 
     def save(self, *args, **kwargs):
         # If the password is not already hashed, hash it before saving

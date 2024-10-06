@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 class ShopAdminAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShopAdminAccount
-        fields = ['id', 'email', 'username', 'password', 'is_staff', 'is_admin', 'is_approved']
+        fields = ['id', 'display_id', 'email', 'username', 'password', 'is_staff', 'is_admin', 'is_approved']
         extra_kwargs = {
             'password': {'write_only': True},
         }
@@ -13,6 +13,15 @@ class ShopAdminAccountSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Hash the password before saving
         validated_data['password'] = make_password(validated_data['password'])
+
+        # Only assign display_id if the account is approved
+        if validated_data.get('is_approved', False):
+            last_display_id = ShopAdminAccount.objects.filter(is_approved=True).order_by('display_id').last()
+            if last_display_id is not None:
+                validated_data['display_id'] = last_display_id.display_id + 1
+            else:
+                validated_data['display_id'] = 1
+
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
