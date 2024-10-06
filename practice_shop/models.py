@@ -3,6 +3,13 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
+    display_id = models.IntegerField(unique=True, editable=False, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:  # Only set display_id for new instances
+            max_display_id = Category.objects.aggregate(models.Max('display_id'))['display_id__max']
+            self.display_id = (max_display_id or 0) + 1
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -15,6 +22,13 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/', blank=True, null=True)
     stock = models.BigIntegerField(default=0)
     available = models.BooleanField(default=True)
+    display_id = models.IntegerField(unique=True, editable=False, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:  # Only set display_id for new instances
+            max_display_id = Product.objects.aggregate(models.Max('display_id'))['display_id__max']
+            self.display_id = (max_display_id or 0) + 1
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -49,11 +63,18 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=50, choices=PAYMENT_METHOD_CHOICES, default='cod')
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    display_id = models.IntegerField(unique=True, editable=False, null=True)
 
     products = models.ManyToManyField(Product, through='OrderItem')
 
+    def save(self, *args, **kwargs):
+        if self.pk is None:  # Only set display_id for new instances
+            max_display_id = Order.objects.aggregate(models.Max('display_id'))['display_id__max']
+            self.display_id = (max_display_id or 0) + 1
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"Order {self.id} by {self.customer_name}"
+        return f"Order {self.display_id} by {self.customer_name}"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
@@ -62,7 +83,7 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.quantity} of {self.product.name} in Order {self.order.id}"
+        return f"{self.quantity} of {self.product.name} in Order {self.order.display_id}"
 
 class PaymentDetails(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
@@ -76,13 +97,13 @@ class CreditCardPayment(PaymentDetails):
     cvv = models.CharField(max_length=3)
 
     def __str__(self):
-        return f"Credit Card Payment for Order {self.order.id}"
+        return f"Credit Card Payment for Order {self.order.display_id}"
 
 class PayPalPayment(PaymentDetails):
     paypal_email = models.EmailField()
 
     def __str__(self):
-        return f"PayPal Payment for Order {self.order.id}"
+        return f"PayPal Payment for Order {self.order.display_id}"
 
 class BankTransferPayment(PaymentDetails):
     account_name = models.CharField(max_length=100)
@@ -90,12 +111,12 @@ class BankTransferPayment(PaymentDetails):
     bank_name = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"Bank Transfer Payment for Order {self.order.id}"
+        return f"Bank Transfer Payment for Order {self.order.display_id}"
 
 class GCashPayment(PaymentDetails):
     def __str__(self):
-        return f"GCash Payment for Order {self.order.id}"
+        return f"GCash Payment for Order {self.order.display_id}"
 
 class MayaPayment(PaymentDetails):
     def __str__(self):
-        return f"Maya Payment for Order {self.order.id}"
+        return f"Maya Payment for Order {self.order.display_id}"
