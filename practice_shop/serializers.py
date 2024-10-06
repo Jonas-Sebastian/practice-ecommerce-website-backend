@@ -4,14 +4,14 @@ from .models import Category, Product, Order, OrderItem, CreditCardPayment, PayP
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
+        fields = ['id', 'display_id', 'name', 'description']
 
 class ProductSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())  # Accepts category ID
 
     class Meta:
         model = Product
-        fields = ['id', 'name', 'category', 'description', 'price', 'image', 'stock', 'available']
+        fields = ['id', 'display_id', 'name', 'category', 'description', 'price', 'image', 'stock', 'available']
 
     def create(self, validated_data):
         return Product.objects.create(**validated_data)
@@ -32,7 +32,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'customer_name', 'customer_email', 'shipping_address', 
+        fields = ['id', 'display_id', 'customer_name', 'customer_email', 'shipping_address', 
                   'order_notes', 'payment_method', 'created_at', 'status', 'order_items', 'status_choices']
 
     def create(self, validated_data):
