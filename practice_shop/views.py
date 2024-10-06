@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -8,6 +9,23 @@ from .serializers import ProductSerializer, CategorySerializer, OrderSerializer,
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    @action(detail=False, methods=['get'], url_path='search')
+    def search(self, request):
+        query = request.query_params.get('q', '')
+        category_id = request.query_params.get('category', None)
+
+        # Build the filter based on query and category (if provided)
+        filters = Q(name__icontains=query) | Q(description__icontains=query)
+
+        if category_id:
+            filters &= Q(category__id=category_id)
+
+        # Filter the products and ensure only available ones are returned
+        products = Product.objects.filter(filters, available=True)
+
+        serializer = self.get_serializer(products, many=True)
+        return Response(serializer.data)
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
