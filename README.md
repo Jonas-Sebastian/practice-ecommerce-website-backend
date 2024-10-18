@@ -17,7 +17,7 @@ For the Admin Management panel, you can use the following credentials:
 
 ### Backend Live Demo
 If you prefer to explore the portfolio without installing anything, you can access the live version here:
-- **Backend Django Admin:** [View Django Admin](https://practice-ecommerce-website-backend.onrender.com/admin)
+- **Backend Django Admin:** [View Django Admin](https://jonas-sebastian-ecommerce-backend.onrender.com/admin)
 
 **Note:** It may take a moment for the backend data to load due to hosting limitations on Render.
 
