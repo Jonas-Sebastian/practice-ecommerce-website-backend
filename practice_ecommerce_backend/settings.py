@@ -105,14 +105,27 @@ WSGI_APPLICATION = 'practice_ecommerce_backend.wsgi.application'
 # }
 
 # Postgres practice database
+# Localhost
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('DB_NAME', 'practice-postgres'),
+#         'USER': os.environ.get('DB_USER', 'postgres'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD', 'admin'),
+#         'HOST': os.environ.get('DB_HOST', 'localhost'),
+#         'PORT': os.environ.get('DB_PORT', '5432'),
+#     }
+# }
+
+# Supabase
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'practice-postgres'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'admin'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'NAME': os.environ.get('DB_NAME','postgres'),
+        'USER': os.environ.get('DB_USER','postgres.zxefksidgvdmsapyzomn'),
+        'PASSWORD': os.environ.get('DB_PASSWORD','68dvn5FA4zr-FLE'),
+        'HOST': os.environ.get('DB_HOST','aws-0-ap-southeast-1.pooler.supabase.com'),
+        'PORT': os.environ.get('DB_PORT','6543'),
     }
 }
 
