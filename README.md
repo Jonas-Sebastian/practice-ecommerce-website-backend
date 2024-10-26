@@ -1,14 +1,14 @@
-# My eCommerce Portfolio
+# Jonas Sebastian's eCommerce Project
 
 ## Description
-Welcome to my eCommerce portfolio! This site showcases my skills in web development through both the frontend and backend of an online shopping platform.
+Welcome to my eCommerce project! This site showcases my skills in web development through both the frontend and backend of an online shopping platform.
 
 ### Front End Live Demo
-If you prefer to explore the portfolio without installing anything, you can access the live versions here:
+If you prefer to explore the project without installing anything, you can access the live versions here:
 - **Frontend Shop:** [View Frontend Live](https://jonas-sebastian-shop.vercel.app/)
 - **Frontend Admin Management:** [View Admin Panel](https://jonas-sebastian-shop.vercel.app/admin)
 
-**Note:** It may take a moment for the backend data to load due to hosting limitations on Render.
+**Note:** It may take a minute for the backend data to load due to hosting limitations on Render.
 
 ### Testing Credentials
 For the Admin Management panel, you can use the following credentials:
@@ -16,10 +16,10 @@ For the Admin Management panel, you can use the following credentials:
 - **Password:** `test`
 
 ### Backend Live Demo
-If you prefer to explore the portfolio without installing anything, you can access the live version here:
+If you prefer to explore the project without installing anything, you can access the live version here:
 - **Backend Django Admin:** [View Django Admin](https://jonas-sebastian-ecommerce-backend.onrender.com/admin)
 
-**Note:** It may take a moment for the backend data to load due to hosting limitations on Render.
+**Note:** It may take a minute for the backend data to load due to hosting limitations on Render.
 
 ### Testing Credentials
 For the Admin Management panel, you can use the following credentials:
@@ -28,7 +28,7 @@ For the Admin Management panel, you can use the following credentials:
 
 ## Local Installation
 
-If you'd like to install the portfolio locally, follow these steps:
+If you'd like to install the project locally, follow these steps:
 
 ### Frontend Setup
 
