@@ -18,10 +18,12 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class OrderItemSerializer(serializers.ModelSerializer):
     product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())  # Accepts just the product ID
+    product_name = serializers.ReadOnlyField(source='product.name')
+    product_image = serializers.ImageField(source='product.image', read_only=True)
 
     class Meta:
         model = OrderItem
-        fields = ['product', 'quantity', 'price']
+        fields = ['product', 'product_name', 'product_image', 'quantity', 'price']
 
     def create(self, validated_data):
         return OrderItem.objects.create(**validated_data)
