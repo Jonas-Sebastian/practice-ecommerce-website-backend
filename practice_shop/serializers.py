@@ -17,7 +17,10 @@ class ProductSerializer(serializers.ModelSerializer):
         return Product.objects.create(**validated_data)
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())  # Accepts just the product ID
+    product = serializers.SlugRelatedField(
+        queryset=Product.objects.all(),
+        slug_field='display_id'
+    )
     product_name = serializers.ReadOnlyField(source='product.name')
     product_image = serializers.ImageField(source='product.image', read_only=True)
 
