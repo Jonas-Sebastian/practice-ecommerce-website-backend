@@ -1,0 +1,30 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Environment variables
+.env
+
+# Virtual environments
+myenv/
+venv/
+env/
+
+# Django stuff
+*.sqlite3
+*.log
+media/
+staticfiles/
+*.pot
+*.pyc
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
