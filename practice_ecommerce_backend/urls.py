@@ -8,4 +8,6 @@ urlpatterns = [
     path('api/practice-shop/', include('practice_shop.urls')),
     path('api/shop-admin/', include('shop_admin.urls')),
     path('api/shop-images/', include('shop_images.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+
+#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
