@@ -40,10 +40,8 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['id', 'display_id', 'customer_name', 'customer_email', 'shipping_address', 
                   'order_notes', 'payment_method', 'created_at', 'status', 'order_items', 'status_choices']
         extra_kwargs = {
-            'customer_name': {'write_only': True},
             'customer_email': {'write_only': True},
             'shipping_address': {'write_only': True},
-            'status': {'write_only': True},
             'order_notes': {'write_only': True},
             'payment_method': {'write_only': True},
         }
