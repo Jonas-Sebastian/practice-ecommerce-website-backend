@@ -113,11 +113,11 @@ WSGI_APPLICATION = 'practice_ecommerce_backend.wsgi.application'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('DB_NAME', 'practice-postgres'),
-#         'USER': os.environ.get('DB_USER', 'postgres'),
-#         'PASSWORD': os.environ.get('DB_PASSWORD', 'admin'),
-#         'HOST': os.environ.get('DB_HOST', 'localhost'),
-#         'PORT': os.environ.get('DB_PORT', '5432'),
+#         'NAME':  'practice-postgres',
+#         'USER':  'postgres',
+#         'PASSWORD': 'admin',
+#         'HOST':  'localhost',
+#         'PORT': '5432',
 #     }
 # }
 
